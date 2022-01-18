@@ -31,3 +31,4 @@ context(`Lodgify Pricing Page for ${amountOfRentals} Rentals` , () => {
     });
   }
 });
+
