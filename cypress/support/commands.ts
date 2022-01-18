@@ -3,7 +3,7 @@ declare namespace Cypress {
     
     openHomePage():  void;
     openContactPage(): void ;
-    openPricingPage: (arg: null) => void;
+    openPricingPage():  void;
     checkPageTitle: (title: string) => void;
     chooseCurrency: (currency: string) => void;
   }
