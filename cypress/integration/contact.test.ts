@@ -1,7 +1,10 @@
 
+const allMandatoryFieldsSet = ["Name", "Phone number", "Comment"];
+const allNotMandatoryFieldsSet = ["Email", "GBP", "EUR"];
+
 
 // STEP 1:
-context(`Lodgify Pricing Page for ${amountOfRentals} Rentals`, () => {
+context(`Lodgify Contact Page for ${amountOfRentals} Rentals`, () => {
   before(() => {
     cy.openPricingPage();
     cy.get(priceScroll).invoke("val", amountOfRentals).trigger("change");
@@ -16,25 +19,6 @@ context(`Lodgify Pricing Page for ${amountOfRentals} Rentals`, () => {
           .within(() => {
             cy.get(planPrice).should("contain.text", planPrices[plan]);
           });
-      });
-    });
-  }
-});
-
-// STEP 2:
-context(`Lodgify Pricing Page for Currencies`, () => {
-  before(() => {
-    cy.openPricingPage();
-  });
-
-  for (const currency of allCurrenciesSet) {
-    it(`Should have proper prices for ${currency} Plan`, () => {
-      cy.fixture("currencies").then((curriences) => {
-        cy.chooseCurrency(currency);
-
-        cy.get(planPrice).each(($el) => {
-          cy.wrap($el).should("contains.text", curriences[currency]);
-        });
       });
     });
   }
