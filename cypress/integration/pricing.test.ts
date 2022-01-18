@@ -11,6 +11,9 @@ const allCurrenciesSet = ["USD", "GBP", "EUR"];
 context(`Lodgify Pricing Page for ${amountOfRentals} Rentals`, () => {
   before(() => {
     cy.openPricingPage();
+    cy.log('Choose USD to make sure tests work even when the default currency was changed')
+    cy.chooseCurrency('USD');
+
     cy.get(priceScroll).invoke("val", amountOfRentals).trigger("change");
   });
 

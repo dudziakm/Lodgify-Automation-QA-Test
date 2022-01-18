@@ -52,12 +52,14 @@ Steps:
 2. On "Lodgify Pricing" page, add a test to verify that the change of currency (located just below the pricing options) properly changes the currency of the pricing options. 
    The way you do so, and the extra verification steps are up to you (such as verifying the currency price difference)
 3. Using your own criteria, add tests according to what you think should be important to cover in this page "Lodgify Pricing". (Optional)
-4. On "Contact" page, add a test to verify that the field validations appear according to the following requirements. 
-   "Name" is mandatory and a message should be displayed in case this field is left empty
-   "Phone number" is mandatory and a message should be displayed in case this field is left empty
-   "Email address" is mandatory and a message should be displayed in case this field is left empty
-   "Comment" is mandatory and a message should be displayed in case this field is left empty
+4. On "Contact" page, add a test to verify that the field validations appear according to the following requirements: 
+   - "Name" is mandatory and a message should be displayed in case this field is left empty
+   - "Phone number" is mandatory and a message should be displayed in case this field is left empty
+   - "Email address" is mandatory and a message should be displayed in case this field is left empty
+   - "Comment" is mandatory and a message should be displayed in case this field is left empty
+   
    This test should pick the date of arrival "April 14th" and date of departure "June 14" to verify the datepicker is working as expected
+   
    This test should also add a random Lorem Ipsum of your choice to "Comment" field
 5. Using your own criteria, add tests according to what you think should be important to cover in this page "Contact". (Optional)
 
