@@ -1,0 +1,6 @@
+{
+  "Name": "Name is mandatory",
+  "Phone": "Phone is mandatory",
+  "Email": "Email is mandatory",
+  "Comment": "Comment is mandatory"
+}
