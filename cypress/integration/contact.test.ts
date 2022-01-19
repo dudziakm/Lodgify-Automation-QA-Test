@@ -1,25 +1,72 @@
+const allMandatoryFieldsSet = ["Name", "Phone", "Email", "Comment"];
+const allFieldsSet = [
+  "Name",
+  "Phone",
+  "Email",
+  "Guests",
+  "Arrival Date",
+  "Departure Date",
+  "Comment",
+];
 
-const allMandatoryFieldsSet = ["Name", "Phone number", "Comment"];
-const allNotMandatoryFieldsSet = ["Email", "GBP", "EUR"];
+const sendButton = '[type="submit"]';
 
+const errorValidationRedLabel = ".ui.red.pointing.below.label";
 
 // STEP 1:
-context(`Lodgify Contact Page for ${amountOfRentals} Rentals`, () => {
-  before(() => {
-    cy.openPricingPage();
-    cy.get(priceScroll).invoke("val", amountOfRentals).trigger("change");
-  });
+context(
+  `Lodgify Contact Page - verify for mandatory fields validations`,
+  () => {
+    before(() => {
+      cy.openContactPage();
+      cy.fixture("contactMandatoryFieldsWarnings").then(
+        (contactMandatoryFieldsWarnings) => {
+          this.contactMandatoryFieldsWarnings = contactMandatoryFieldsWarnings;
+          cy.get(sendButton).contains("Send").click();
+        }
+      );
+    });
 
-  for (const plan of allPlansSet) {
-    it(`Should have proper prices for ${plan} Plan`, () => {
-      cy.fixture("planPricesFor50Rentals").then((planPrices) => {
-        cy.get(priceCard)
-          .contains(plan)
-          .parent()
-          .within(() => {
-            cy.get(planPrice).should("contain.text", planPrices[plan]);
-          });
+    for (const field of allMandatoryFieldsSet) {
+      it(`Should have proper validations for mandatory field: ${field}`, () => {
+        cy.get(errorValidationRedLabel)
+          .contains(this.contactMandatoryFieldsWarnings[field])
+          .should("be.visible");
+      });
+    }
+  }
+);
+
+context(
+  `Lodgify Contact Page - verify for mandatory fields validations`,
+  () => {
+    before(() => {
+      cy.openContactPage();
+    });
+
+    it(`Should have proper values for all fields`, () => {
+      cy.fixture("contactFieldsValues").then((formValues) => {
+        cy.fillContactData(
+          formValues.Name,
+          formValues.Phone,
+          formValues.Email,
+          formValues.Guests,
+          formValues.ArrivalDate,
+          formValues.DepartureDate,
+          formValues.Comment
+        );
+
+        cy.checkContactData(
+          formValues.Name,
+          formValues.Phone,
+          formValues.Email,
+          formValues.Guests,
+          formValues.ArrivalDate,
+          formValues.DepartureDate,
+          formValues.Comment
+        );
+
       });
     });
   }
-});
+);
