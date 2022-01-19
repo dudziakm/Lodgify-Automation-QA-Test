@@ -1,11 +1,10 @@
-const priceCard = ".price-item";
-const planPrice = ".plan-price";
-const priceScroll = "#scroll-prop-plan";
-
 const amountOfRentals = 50;
 
 const allPlansSet = ["Starter", "Professional", "Ultimate"];
 const allCurrenciesSet = ["USD", "GBP", "EUR"];
+
+const priceCard = ".price-item";
+const planPrice = ".plan-price";
 
 // STEP 1:
 context(`Lodgify Pricing Page for ${amountOfRentals} Rentals`, () => {
@@ -16,7 +15,7 @@ context(`Lodgify Pricing Page for ${amountOfRentals} Rentals`, () => {
     );
     cy.chooseCurrency("USD");
 
-    cy.get(priceScroll).invoke("val", amountOfRentals).trigger("change");
+    cy.setAmountOfRentals(amountOfRentals);
   });
 
   for (const plan of allPlansSet) {

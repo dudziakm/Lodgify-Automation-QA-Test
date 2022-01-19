@@ -4,6 +4,7 @@ declare namespace Cypress {
     openContactPage(): void;
     openPricingPage(): void;
     checkPageTitle: (title: string) => void;
+    setAmountOfRentals: (amountOfRentals: number) => void;
     chooseCurrency: (currency: string) => void;
     fillContactData: (
       name: string,
@@ -29,11 +30,12 @@ declare namespace Cypress {
 }
 
 // PRICE PAGE
+const priceScroll = "#scroll-prop-plan";
 const priceCurrencySelect = ".price-currency-select";
 
 // CONTACT PAGE
 const contactNameInput = '[name="name"]';
-const contactPhoneInput = '.PhoneInputInput';
+const contactPhoneInput = ".PhoneInputInput";
 const contactEmailInput = '[name="email"]';
 const contactGuestsInput = '[name="guests"]';
 const contactArrivalDateInput = '[aria-label="Arrival"]';
@@ -41,7 +43,7 @@ const contactDepartureDateInput = '[aria-label="Departure"]';
 const contactCommentInput = '[placeholder="Comment"]';
 
 const sendButton = '[type="submit"]';
-const contactSuccessMessage = '[data-testid=form] > .success';
+const contactSuccessMessage = "[data-testid=form] > .success";
 
 Cypress.Commands.add("openPricingPage", () => {
   cy.visit("/pricing.html");
@@ -62,6 +64,10 @@ Cypress.Commands.add("checkPageTitle", (title: string) => {
 Cypress.Commands.add("chooseCurrency", (currency: string) => {
   cy.get(priceCurrencySelect).select(currency.toLowerCase());
   cy.get(priceCurrencySelect).should("contain.text", currency);
+});
+
+Cypress.Commands.add("setAmountOfRentals", (amountOfRentals: number) => {
+  cy.get(priceScroll).invoke("val", amountOfRentals).trigger("change");
 });
 
 Cypress.Commands.add(
