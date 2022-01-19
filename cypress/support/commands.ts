@@ -23,20 +23,25 @@ declare namespace Cypress {
       departureDate: string,
       comment: string
     ) => void;
+    submitContactForm(): void;
+    checkSuccessMessageIsVisible(): void;
   }
 }
 
 // PRICE PAGE
 const priceCurrencySelect = ".price-currency-select";
 
-
+// CONTACT PAGE
 const contactNameInput = '[name="name"]';
-const contactPhoneInput = ".PhoneInputInput";
+const contactPhoneInput = '.PhoneInputInput';
 const contactEmailInput = '[name="email"]';
 const contactGuestsInput = '[name="guests"]';
 const contactArrivalDateInput = '[aria-label="Arrival"]';
 const contactDepartureDateInput = '[aria-label="Departure"]';
 const contactCommentInput = '[placeholder="Comment"]';
+
+const sendButton = '[type="submit"]';
+const contactSuccessMessage = '[data-testid=form] > .success';
 
 Cypress.Commands.add("openPricingPage", () => {
   cy.visit("/pricing.html");
@@ -74,33 +79,37 @@ Cypress.Commands.add(
     cy.get(contactPhoneInput).type(phone);
     cy.get(contactEmailInput).type(email);
     cy.get(contactGuestsInput).type(guests);
-    cy.get(contactArrivalDateInput).type(arrivalDate, {force: true});
-    cy.get(contactDepartureDateInput).type(departureDate, {force: true});
+    cy.get(contactArrivalDateInput).type(arrivalDate, { force: true });
+    cy.get(contactDepartureDateInput).type(departureDate, { force: true });
     cy.get(contactCommentInput).type(comment);
-
-
   }
 );
 
 Cypress.Commands.add(
-   "checkContactData",
-   (
-     name: string,
-     phone: string,
-     email: string,
-     guests: string,
-     arrivalDate: string,
-     departureDate: string,
-     comment: string
-   ) => {
-     cy.get(contactNameInput).should('contain.value', name);
-     cy.get(contactPhoneInput).should('contain.value', phone);
-     cy.get(contactEmailInput).should('contain.value', email);
-     cy.get(contactGuestsInput).should('contain.value', guests);
-     cy.get(contactArrivalDateInput).should('contain.value', arrivalDate);
-     cy.get(contactDepartureDateInput).should('contain.value', departureDate);
-     cy.get(contactCommentInput).should('contain.value', comment);
- 
- 
-   }
- );
+  "checkContactData",
+  (
+    name: string,
+    phone: string,
+    email: string,
+    guests: string,
+    arrivalDate: string,
+    departureDate: string,
+    comment: string
+  ) => {
+    cy.get(contactNameInput).should("contain.value", name);
+    cy.get(contactPhoneInput).should("contain.value", phone);
+    cy.get(contactEmailInput).should("contain.value", email);
+    cy.get(contactGuestsInput).should("contain.value", guests);
+    cy.get(contactArrivalDateInput).should("contain.value", arrivalDate);
+    cy.get(contactDepartureDateInput).should("contain.value", departureDate);
+    cy.get(contactCommentInput).should("contain.value", comment);
+  }
+);
+
+Cypress.Commands.add("submitContactForm", () => {
+  cy.get(sendButton).contains("Send").click();
+});
+
+Cypress.Commands.add("checkSuccessMessageIsVisible", () => {
+  cy.get(contactSuccessMessage).should("be.visible", { timeout: 60000 });
+});

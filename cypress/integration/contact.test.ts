@@ -9,8 +9,6 @@ const allFieldsSet = [
   "Comment",
 ];
 
-const sendButton = '[type="submit"]';
-
 const errorValidationRedLabel = ".ui.red.pointing.below.label";
 
 // STEP 1:
@@ -22,7 +20,7 @@ context(
       cy.fixture("contactMandatoryFieldsWarnings").then(
         (contactMandatoryFieldsWarnings) => {
           this.contactMandatoryFieldsWarnings = contactMandatoryFieldsWarnings;
-          cy.get(sendButton).contains("Send").click();
+          cy.submitContactForm();
         }
       );
     });
@@ -65,8 +63,30 @@ context(
           formValues.DepartureDate,
           formValues.Comment
         );
-
       });
     });
   }
 );
+
+context(`Lodgify Contact Page - check Submit results`, () => {
+  before(() => {
+    cy.openContactPage();
+  });
+
+  it(`Should properly submit the form`, () => {
+    cy.fixture("contactFieldsValues").then((formValues) => {
+      cy.fillContactData(
+        formValues.Name,
+        formValues.Phone,
+        formValues.Email,
+        formValues.Guests,
+        formValues.ArrivalDate,
+        formValues.DepartureDate,
+        formValues.Comment
+      );
+
+      cy.submitContactForm();
+      cy.checkSuccessMessageIsVisible();
+    });
+  });
+});
