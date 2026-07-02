@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "overrides": {
+    "qs": "6.15.2"
   }
 }
