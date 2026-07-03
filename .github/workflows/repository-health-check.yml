@@ -1,0 +1,63 @@
+name: Repository Health Check
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Add useful repository links
+        run: |
+          echo "## Repository Links" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Security overview: https://github.com/${{ github.repository }}/security" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dependabot alerts: https://github.com/${{ github.repository }}/security/dependabot" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Actions history: https://github.com/${{ github.repository }}/actions" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Print runtime versions
+        run: |
+          echo "## Runtime Versions" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Node.js: $(node -v)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- npm: $(npm -v)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run npm security audit (informational)
+        run: |
+          npm audit --package-lock-only --json > audit.json || true
+          node - <<'EOF'
+          const fs = require("fs");
+          const audit = JSON.parse(fs.readFileSync("audit.json", "utf8"));
+          const v = (audit.metadata && audit.metadata.vulnerabilities) || {};
+          const total = Object.values(v).reduce((sum, n) => sum + Number(n || 0), 0);
+          const lines = [
+            "## Security Audit Summary",
+            "- This check is informational and does not fail the workflow.",
+            `- Total findings: ${total}`,
+            `- Critical: ${v.critical || 0}`,
+            `- High: ${v.high || 0}`,
+            `- Moderate: ${v.moderate || 0}`,
+            `- Low: ${v.low || 0}`,
+            `- Info: ${v.info || 0}`,
+          ];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+          EOF
+
+      - name: Upload raw audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: audit.json
